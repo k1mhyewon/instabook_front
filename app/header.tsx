@@ -3,8 +3,14 @@
 import Image from "next/image";
 import logoimg from "../public/images/logo.png";
 import Link from "next/link";
+import { useContext, useRef } from "react";
+import { UserContext } from "@/app/userContextProvider";
 
 export const Header = () => {
+  const usercontext = useContext<number | null>(UserContext);
+  const userId = usercontext ?? "";
+  // console.log(userId + "userid");
+
   return (
     <>
       <header className="border-b-0 border-gray-300 w-full h-18 flex justify-center items-center relative">
@@ -25,7 +31,7 @@ export const Header = () => {
               />
             </svg>
           </Link>
-          <Link href="/write">
+          <Link href="/post/write">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -48,7 +54,7 @@ export const Header = () => {
           </Link>
         </div>
         <div className="absolute right-0 flex items-center mr-4">
-          <Link href="/profile">
+          <Link href={`/profile/${userId}`}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -69,3 +75,6 @@ export const Header = () => {
     </>
   );
 };
+function componentDidMount() {
+  throw new Error("Function not implemented.");
+}

@@ -5,8 +5,13 @@ import userimg from "../../public/images/user.jpg";
 import { useState } from "react";
 import Link from "next/link";
 import { ReplyOne } from "./replyOne";
+import { CommentType } from "../types/commentType";
 
-export const ReplyUserTitle = () => {
+type PostReplyProps = {
+  comments: CommentType[] | undefined;
+};
+
+export const ReplyUserTitle = (props: PostReplyProps) => {
   const [replyInputs, setReplyInputs] = useState(
     // 초기값으로 각 댓글의 showInput 상태를 false로 설정
     new Array(2).fill(false)

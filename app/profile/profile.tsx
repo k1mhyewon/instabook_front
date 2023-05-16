@@ -1,8 +1,12 @@
 import Image from "next/image";
 import userimg from "../../public/images/user.jpg";
 import Link from "next/link";
+import { UserTypes } from "../types/userTypes";
 
-export const Profile = () => {
+type ProfileProps = {
+  userInfo: UserTypes | undefined;
+};
+export const Profile = (props: ProfileProps) => {
   return (
     <>
       <div className="mb-4">
@@ -15,7 +19,7 @@ export const Profile = () => {
             />
           </div>
           <div className="flex flex-col ml-4 justify-center pl-4 mb-5">
-            <div className="font-bold text-lg">Danbi</div>
+            <div className="font-bold text-lg">{props.userInfo?.userName}</div>
             <div className="flex mt-4">
               <div className="mr-4">
                 <div className="text-sm">Post</div>
@@ -42,11 +46,58 @@ export const Profile = () => {
           </div>
         </div>
         <div className="w-10/12 ml-6 mr-6">
-          <div className="text-base font-semibold mb-2">맹단비</div>
-          <div className="text-sm">자기소개</div>
+          <div className="text-base font-semibold mb-2">
+            {props.userInfo?.name}
+          </div>
+          <div className="text-sm">{props.userInfo?.userInfo}</div>
         </div>
       </div>
       <hr />
     </>
   );
 };
+
+// const usercontext = useContext<number | null>(UserContext);
+// const userId = usercontext ?? "";
+
+// const [userInfo, setUserInfo] = useState<UserTypes | undefined>();
+// //MutableRefObject<string>
+
+// // const userPosts: any = useRef("");
+// const [userPosts, setUserPosts] = useState<PostType | undefined>();
+
+// useEffect(() => {
+//   // let userId: number | null = null;
+//   // if (typeof window !== "undefined") {
+//   //   const sessionData = sessionStorage.getItem("access-token");
+//   //   if (sessionData) {
+//   //     const token = JSON.parse(sessionData);
+
+//   //     if (token) {
+//   axios
+//     .get(`http://localhost:3000/api/profile/${props.userId}`, {})
+//     .then((response) => {
+//       const resUserInfo = response.data;
+//       setUserInfo(resUserInfo);
+//     })
+//     .catch((error) => {
+//       console.error(error);
+//     });
+
+//   axios
+//     .get(`http://localhost:3000/api/profile/${props.userId}/posts`, {})
+//     .then((response) => {
+//       const resUserPosts = response.data;
+//       setUserPosts(resUserPosts);
+//     })
+//     .catch((error) => {
+//       console.error(error);
+//     });
+//   //     }
+//   //   }
+//   // }
+// }, []);
+
+// console.log(userInfo);
+
+// console.log(userPosts);

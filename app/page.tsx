@@ -4,9 +4,9 @@ import { UserPost } from "./profile/userPost";
 export default function Home() {
   return (
     <>
-      <UserPost />
-      <UserPost />
-      <UserPost />
+      {/* <UserPost userId={7}/>
+      <UserPost userId={7}/>
+      <UserPost userId={7}/> */}
     </>
   );
 }

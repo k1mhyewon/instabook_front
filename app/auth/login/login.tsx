@@ -4,8 +4,25 @@ import Link from "next/link";
 import axios from "axios";
 import Image from "next/image";
 import { Inputs } from "@/app/components/inputs";
+import { useContext, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { UserContext } from "@/app/userContextProvider";
 
 export const Login = () => {
+  const userId = useContext<number | null>(UserContext);
+  // console.log("dd");
+  // console.log(userId);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    // const token = sessionStorage.getItem("access-token");
+    if (userId) {
+      // 로그인된 상태이므로 다음 경로로 리다이렉트 또는 필요한 작업을 수행합니다.
+      router.push("/");
+    }
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // 폼 데이터 수집
@@ -32,6 +49,11 @@ export const Login = () => {
         }
       );
       console.log(response.data);
+      sessionStorage.setItem(
+        "access-token",
+        JSON.stringify(response.data.access_token)
+      );
+      router.push("/");
       alert("로그인 성공");
     } catch (error) {
       alert("로그인 실패");
