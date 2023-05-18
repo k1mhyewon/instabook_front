@@ -1,12 +1,72 @@
+"use client";
 import Image from "next/image";
 import userimg from "../../public/images/user.jpg";
 import Link from "next/link";
-import { UserTypes } from "../types/userTypes";
+import { UserTypes, UserWithFollowType } from "../types/userTypes";
+import { useContext, useRef, useState } from "react";
+import { UserContext } from "../userContextProvider";
+import { useRouter } from "next/router";
+import axios from "axios";
 
 type ProfileProps = {
-  userInfo: UserTypes | undefined;
+  userInfo: UserWithFollowType | undefined;
+  postCnt: number;
+  userId: string;
 };
+
 export const Profile = (props: ProfileProps) => {
+  const usercontext = useContext<number | null>(UserContext);
+  const userId: number | undefined = usercontext ?? undefined;
+  const str_loginUserId = userId?.toString();
+
+  const str_selectedUserId = props.userId;
+
+  const thisProfileIsMe = useRef(false);
+  if (str_loginUserId === str_selectedUserId) {
+    thisProfileIsMe.current = true;
+  }
+
+  const imFollowingThis = useRef(false);
+
+  props.userInfo?.followTo.map((user, i) => {
+    if (user.followFrom.toString() === str_loginUserId) {
+      imFollowingThis.current = true;
+      return;
+    } else {
+      imFollowingThis.current = false;
+    }
+  });
+
+  const goFollow = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/api/profile/goFollow/${str_loginUserId}/${str_selectedUserId}`,
+        {}
+      );
+      console.log(response.data);
+
+      alert("팔로우 성공");
+    } catch (error) {
+      alert("팔로우 실패");
+      console.error(error);
+    }
+  };
+
+  const goUnfollow = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/api/profile/goUnfollow/${str_loginUserId}/${str_selectedUserId}`,
+        {}
+      );
+      console.log(response.data);
+
+      alert("언팔 성공");
+    } catch (error) {
+      alert("언팔 실패");
+      console.error(error);
+    }
+  };
+
   return (
     <>
       <div className="mb-4">
@@ -23,26 +83,56 @@ export const Profile = (props: ProfileProps) => {
             <div className="flex mt-4">
               <div className="mr-4">
                 <div className="text-sm">Post</div>
-                <div className="text-sm text-center">0</div>
+                <div className="text-sm text-center">{props.postCnt}</div>
               </div>
-              <Link href="/profile/follow">
+              <Link href={`/profile/${str_selectedUserId}/followers`}>
                 <div className="mr-4">
                   <div className="text-sm">Followers</div>
-                  <div className="text-sm text-center">21.6K</div>
+                  <div className="text-sm text-center">
+                    {props.userInfo?.followTo.length}
+                  </div>
                 </div>
               </Link>
-              <Link href="/profile/follow">
+              <Link href={`/profile/${str_selectedUserId}/following`}>
                 <div className="mr-4">
                   <div className="text-sm">Following</div>
-                  <div className="text-sm text-center">0</div>
+                  <div className="text-sm text-center">
+                    {props.userInfo?.followFrom.length}
+                  </div>
                 </div>
               </Link>
             </div>
-            <Link href="/profile/edit">
-              <button className="px-4 py-2 bg-blue-500 text-white rounded-md mt-4 w-44 h-8 text-sm bg-amber-200">
-                Edit
-              </button>
-            </Link>
+            {thisProfileIsMe.current ? (
+              <>
+                <Link href={`/profile/${userId}/edit`}>
+                  <button className="px-4 py-2 bg-blue-500 text-white rounded-md mt-4 w-44 h-8 text-sm bg-amber-200">
+                    Edit
+                  </button>
+                </Link>
+              </>
+            ) : (
+              <>
+                {imFollowingThis.current ? (
+                  <>
+                    <button
+                      className="px-4 py-2 bg-gray-400 text-white rounded-md mt-4 w-44 h-8 text-sm bg-amber-200"
+                      onClick={goUnfollow}
+                    >
+                      Unfollow
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      className="px-4 py-2 bg-blue-500 text-white rounded-md mt-4 w-44 h-8 text-sm bg-amber-200"
+                      onClick={goFollow}
+                    >
+                      Follow
+                    </button>
+                  </>
+                )}
+              </>
+            )}
           </div>
         </div>
         <div className="w-10/12 ml-6 mr-6">
@@ -101,3 +191,9 @@ export const Profile = (props: ProfileProps) => {
 // console.log(userInfo);
 
 // console.log(userPosts);
+
+// const str_selectedUserId = location.pathname.split("/")[2];
+// const router = useRouter();
+// const { query } = router;
+// const str_selectedUserId = query.userId;
+// console.log(str_selectedUserId);

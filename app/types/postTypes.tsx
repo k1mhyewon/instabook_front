@@ -1,13 +1,21 @@
-import { CommentType } from "./commentType";
+import { CommentType, CommentWithUserInfoType } from "./commentType";
 import { PostLikeType } from "./postLikeType";
+import { UserTypes } from "./userTypes";
 
 export type PostType = {
-  id: number;
-  userId: number;
+  id: string;
+  userId: string;
   content: string;
-  uploadDate: Date;
+  uploadDate: string;
   postPhoto: string;
-  viewCount: number;
+  viewCount: string;
   likes: PostLikeType[];
-  comments: CommentType[];
+  comments: CommentWithUserInfoType[];
+  user: UserTypes;
+};
+
+export type PostTypeWithTags = {
+  postId: string;
+  tagName: string;
+  post: PostType;
 };

@@ -14,27 +14,25 @@ export const UserContextProvider: React.FC<UserContextProps> = ({
 
   useEffect(() => {
     let userId: number | null = null;
-    if (typeof window !== "undefined") {
-      const sessionData = sessionStorage.getItem("access-token");
-      if (sessionData) {
-        const token = JSON.parse(sessionData);
-        console.log(token);
-        if (token) {
-          axios
-            .get("http://localhost:3000/api/getUserInfo", {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            })
-            .then((response) => {
-              userId = response.data.sub;
-              console.log(userId);
-              setUserContext(userId);
-            })
-            .catch((error) => {
-              console.error(error);
-            });
-        }
+    const sessionData = sessionStorage.getItem("access-token");
+    if (typeof window !== "undefined" && sessionData) {
+      const token = JSON.parse(sessionData);
+      console.log(token);
+      if (token) {
+        axios
+          .get("http://localhost:3000/api/getUserInfo", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((response) => {
+            userId = response.data.sub;
+            console.log(userId);
+            setUserContext(userId);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       }
     }
   }, []);

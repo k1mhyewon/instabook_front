@@ -1,13 +1,14 @@
-import { CommentType } from "../types/commentType";
+import { CommentType, CommentWithUserInfoType } from "../types/commentType";
 import { ReplyUserTitle } from "./replyUserTitle";
 
 type PostReplyProps = {
-  comments: CommentType[] | undefined;
+  commentArr: CommentWithUserInfoType[] | undefined;
+  postId: string;
 };
 export const PostReply = (props: PostReplyProps) => {
   return (
     <>
-      <ReplyUserTitle comments={props?.comments} />
+      <ReplyUserTitle commentArr={props?.commentArr} postId={props.postId} />
     </>
   );
 };

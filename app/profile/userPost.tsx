@@ -9,11 +9,13 @@ import { HomeUserTitle } from "../home/homeUserTitle";
 import axios from "axios";
 import { UserPostContent } from "./components/userPostContent";
 import { PostType } from "../types/postTypes";
+import { UserWithFollowType } from "../types/userTypes";
+import { Likes } from "../components/likes";
+import { PostTags } from "../components/postTags";
 
 type PostProps = {
   userPosts: PostType[] | undefined;
-  userName: string | undefined;
-  profilePhoto: string | undefined;
+  userInfo?: UserWithFollowType | undefined;
 };
 
 export const UserPost = (props: PostProps) => {
@@ -28,8 +30,9 @@ export const UserPost = (props: PostProps) => {
       {props.userPosts?.map((post, i) => (
         <div key={i}>
           <HomeUserTitle
-            userName={props.userName}
-            profilePhoto={props.profilePhoto}
+            userName={post.user.userName}
+            userId={post.user.id}
+            profilePhoto={post.user.profilePhoto}
           />
           <div>
             <div className="flex flex-col mt-4 mb-2">
@@ -40,27 +43,11 @@ export const UserPost = (props: PostProps) => {
                   <Image src={postimg} alt="user" className="object-fill" />
                 </div>
               </div>
+              <PostTags postId={post.id} />
 
-              <div className="flex flex-row text-sm mt-8 ml-4">
-                <Link href="/like">
-                  <div className="flex mr-4">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="w-6 h-6 text-red-600 mr-1"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
-                      />
-                    </svg>
-                    <p>{post.likes.length}</p>
-                  </div>
-                </Link>
+              <div className="flex flex-row text-sm mt-4 ml-4">
+                <Likes post={post} />
+
                 <div className="flex " onClick={handleReplyClick}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -76,7 +63,7 @@ export const UserPost = (props: PostProps) => {
                       d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"
                     />
                   </svg>
-                  <p>45</p>
+                  <p>{post.comments.length}</p>
                 </div>
 
                 <div className="flex ml-auto">
@@ -116,8 +103,12 @@ export const UserPost = (props: PostProps) => {
                 </div>
               </div>
             </div>
-            <div className="text-xs text-gray-500 ml-5 mb-2">2023-05-12</div>
-            {showReply && <PostReply comments={post?.comments} />}
+            <div className="text-xs text-gray-500 ml-5 mb-2">
+              {post.uploadDate}
+            </div>
+            {showReply && (
+              <PostReply commentArr={post.comments} postId={post.id} />
+            )}
 
             <hr />
           </div>

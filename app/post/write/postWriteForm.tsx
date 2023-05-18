@@ -1,18 +1,45 @@
 "use client";
 import axios from "axios";
 import EmojiPicker from "emoji-picker-react";
-import { useContext, useEffect, useRef, useState } from "react";
+import {
+  ChangeEventHandler,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { UserContext } from "@/app/userContextProvider";
 import { useRouter } from "next/navigation";
+import Tags from "@yaireo/tagify/dist/react.tagify";
+import { TagifyComponent } from "@/app/components/tagify";
+import Tagify from "@yaireo/tagify";
+import { FileInput } from "./conponents/fileInput";
 
 export const PostWriteForm = () => {
   const router = useRouter();
 
-  // 파일업로드
-  const [selectedImage, setSelectedImage] = useState("");
-  const [selectedFile, setSelectedFile] = useState<File>();
+  // emoji picker
+  const [showEmoji, setShowEmoji] = useState(false);
+  const [inputStr, setInputStr] = useState("");
 
-  const content = useRef("");
+  // tag
+  const [tagValues, setTagValues] = useState("");
+  const [inputValue, setInputValue] = useState("");
+
+  useEffect(() => {
+    setInputValue(tagValues);
+  }, [tagValues]);
+
+  const handleChange = (e: any) => {
+    setInputValue(e.target.value);
+  };
+
+  const onEmojiClick = (e: any, emojiObject: any) => {
+    setInputStr((prevInput) => prevInput + emojiObject.emoji);
+    setShowEmoji(false);
+  };
+
+  // const content = useRef("");
   const usercontext = useContext<number | null>(UserContext);
   const userId = usercontext ?? "";
 
@@ -41,7 +68,7 @@ export const PostWriteForm = () => {
         },
       });
 
-      router.push("/");
+      router.push(`/home/${userId}`);
       alert("포스팅 성공");
     } catch (error) {
       alert("포스팅 실패");
@@ -59,6 +86,7 @@ export const PostWriteForm = () => {
                 <button
                   type="button"
                   className="p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
+                  onClick={() => setShowEmoji((val) => !val)}
                 >
                   <svg
                     aria-hidden="true"
@@ -76,7 +104,9 @@ export const PostWriteForm = () => {
                   <span className="sr-only">Add emoji</span>
                 </button>
               </div>
-              <div>{/* <EmojiPicker /> */}</div>
+              <div>
+                {showEmoji && <EmojiPicker onEmojiClick={onEmojiClick} />}
+              </div>
 
               <div className="flex flex-wrap items-center space-x-1 sm:pl-4"></div>
             </div>
@@ -92,72 +122,21 @@ export const PostWriteForm = () => {
               placeholder="100글자 이내로 작성해주세요"
               required
               name="content"
-              onChange={(e) => {
-                content.current = e.target.value;
-              }}
+              value={inputStr}
+              onChange={(e) => setInputStr(e.target.value)}
             />
           </div>
 
-          <div className="flex items-center justify-center w-full">
-            <label
-              htmlFor="profilePhoto"
-              className="flex flex-col items-center justify-center w-full h-36 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
-            >
-              <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                <svg
-                  aria-hidden="true"
-                  className="w-6 h-6 mb-3 text-gray-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                  ></path>
-                </svg>
-                <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                  <span className="font-semibold">Click to upload</span> or drag
-                  and drop
-                </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
-                  SVG, PNG, JPG or GIF (MAX. 800x400px)
-                </p>
-              </div>
-              <input
-                id="profilePhoto"
-                type="file"
-                className="hidden"
-                name="profilePhoto"
-                onChange={({ target }) => {
-                  if (target.files) {
-                    const file = target.files[0];
-                    setSelectedImage(URL.createObjectURL(file));
-                    setSelectedFile(file);
-                  }
-                }}
-              />
-            </label>
-            {selectedImage ? (
-              <img src={selectedImage} alt="" className="w-20 h-30" />
-            ) : (
-              <div></div>
-            )}
-          </div>
-          <div className="px-4 py-2 bg-white rounded-b-lg dark:bg-gray-800">
-            <textarea
-              id="chat"
-              className="block h-8 w-full text text-gray-900 bg-white rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder=" #"
-            />
-            <div className="mt-3">
-              <a className="underline mr-4">#ig</a>
-              <a className="underline mr-4">#danbi</a>
-            </div>
-          </div>
+          <FileInput />
+
+          <input
+            name="postTag"
+            placeholder="#해시태그"
+            type="hidden"
+            value={inputValue}
+            onChange={handleChange}
+          />
+          <TagifyComponent setTagValues={setTagValues} />
         </div>
 
         <div>

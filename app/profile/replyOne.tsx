@@ -3,32 +3,41 @@
 import Image from "next/image";
 import userimg from "../../public/images/user.jpg";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { UserTypes } from "../types/userTypes";
+import { CommentLikeType } from "../types/commentLikeType";
+import { CommentWithUserInfoType } from "../types/commentType";
 
-export const ReplyOne = () => {
-  const [replyInputs, setReplyInputs] = useState(
-    // 초기값으로 각 댓글의 showInput 상태를 false로 설정
-    new Array(2).fill(false)
-  );
+type ReplyOneProps = {
+  commentInfo: CommentWithUserInfoType;
+  // key: number;
+};
 
-  const handleReplyInputClick = (index: number) => {
-    // index에 해당하는 댓글의 showInput 상태를 toggle
-    setReplyInputs((inputs) => {
-      const newInputs = inputs.map(() => false);
-      newInputs[index] = true;
-      return newInputs;
-    });
-  };
+export const ReplyOne = (props: ReplyOneProps) => {
+  // const [replyInputs, setReplyInputs] = useState(
+  //   // 초기값으로 각 댓글의 showInput 상태를 false로 설정
+  //   new Array(2).fill(false)
+  // );
 
-  const [isFilled, setIsFilled] = useState(new Array(2).fill(false));
+  // const handleReplyInputClick = (index: number) => {
+  //   // index에 해당하는 댓글의 showInput 상태를 toggle
+  //   setReplyInputs((inputs) => {
+  //     const newInputs = inputs.map(() => false);
+  //     newInputs[index] = true;
+  //     return newInputs;
+  //   });
+  // };
 
-  const handleClick = (index: number) => {
-    setIsFilled((likesInputs) => {
-      const newLikesInputs = likesInputs.map(() => false);
-      newLikesInputs[index] = true;
-      return newLikesInputs;
-    });
-  };
+  // const [isFilled, setIsFilled] = useState(new Array(2).fill(false));
+
+  // const handleClick = (index: number) => {
+  //   setIsFilled((likesInputs) => {
+  //     const newLikesInputs = likesInputs.map(() => false);
+  //     newLikesInputs[index] = true;
+  //     return newLikesInputs;
+  //   });
+  // };
 
   return (
     <>
@@ -42,20 +51,25 @@ export const ReplyOne = () => {
         </div>
         <div className="mb-2">
           <div className="flex items-row">
-            <div className="text-xs">username</div>
-            <div className="text-xs justify-end">2023-05-12 11:29</div>
+            <Link href={`/profile/${props.commentInfo?.user.id}`}>
+              <div className="text-xs font-bold">
+                {props.commentInfo?.user.userName}
+              </div>
+            </Link>
+            <div className="text-xs justify-end">
+              {props.commentInfo?.uploadDate}
+            </div>
           </div>
           <div className="flex items-row">
-            <div className="flex-1">
-              댓글내용 댓글내용 댓글내용 댓글내용 댓글내용 댓글내용
-            </div>
+            <div className="flex-1 ">{props.commentInfo?.content}</div>
             <div
               className="flex justify-end mr-4 ml-2 items-center"
-              onClick={() => handleClick(1)}
+              // onClick={() => handleClick(1)}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                fill={isFilled ? "red" : "none"}
+                // fill={isFilled ? "red" : "none"}
+                fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
                 stroke="currentColor"
@@ -72,20 +86,22 @@ export const ReplyOne = () => {
           <div className="flex flex-row mt-1">
             <Link href="/like">
               <div className="flex mr-2">
-                <p className="text-xs text-slate-600 ml-1">2</p>
+                <p className="text-xs text-slate-600 ml-1">
+                  {props.commentInfo?.likes.length}
+                </p>
                 <p className="text-xs text-slate-600 ml-1">like</p>
               </div>
             </Link>
-            <div
+            {/* <div
               className="text-xs text-slate-600"
-              onClick={() => handleReplyInputClick(1)}
+              // onClick={() => handleReplyInputClick(1)}
             >
               reply
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
-      {replyInputs[1] && (
+      {/* {replyInputs[1] && (
         <div className="flex justify-center mt-3">
           <div className="text-gray-400 ml-4 text-xl pt-1">{"|"}</div>
           <input
@@ -94,10 +110,10 @@ export const ReplyOne = () => {
             className="py-1 border border-gray-300 rounded-lg mb-4 ml-4 w-9/12 "
           />
         </div>
-      )}
+      )} */}
     </>
   );
 };
-function setIsFilled(arg0: (prevState: any) => boolean) {
-  throw new Error("Function not implemented.");
-}
+// function setIsFilled(arg0: (prevState: any) => boolean) {
+//   throw new Error("Function not implemented.");
+// }

@@ -1,6 +1,37 @@
+"use client";
+import axios from "axios";
 import { HomeUserTitle } from "../home/homeUserTitle";
+import { UserPost } from "../profile/userPost";
+import { useEffect, useState } from "react";
+import { PostType, PostTypeWithTags } from "../types/postTypes";
 
-export const SearchInput = () => {
+type SearchInputProps = {
+  tagName: string;
+};
+export const SearchInput = (props: SearchInputProps) => {
+  const [userPosts, setUserPosts] = useState<PostType[] | undefined>();
+
+  const getPosts = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/api/search/${props.tagName}`,
+        {}
+      );
+      const posts: PostType[] = response.data.map(
+        (item: PostTypeWithTags) => item.post
+      );
+      setUserPosts(posts);
+      console.log(response.data);
+    } catch (error) {
+      alert("/post/tags/  실패");
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getPosts();
+  }, []);
+
   return (
     <>
       <div className="mx-auto py-8 px-4 ">
@@ -53,10 +84,8 @@ export const SearchInput = () => {
             <span className="sr-only">Search</span>
           </button>
         </form>
-        <div className="mt-8">
-          <div className="mb-4">
-            <HomeUserTitle />
-          </div>
+        <div className="mt-8 mb-4 max-h-[725px] overflow-y-auto">
+          {/* <UserPost userPosts={userPosts} /> */}
         </div>
       </div>
     </>

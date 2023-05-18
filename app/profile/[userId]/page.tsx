@@ -7,14 +7,14 @@ import { useContext, useEffect, useState } from "react";
 import { UserPost } from "../userPost";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { UserContext } from "@/app/userContextProvider";
-import { UserTypes } from "@/app/types/userTypes";
+import { UserTypes, UserWithFollowType } from "@/app/types/userTypes";
 import { PostType } from "@/app/types/postTypes";
 
 export default function ProfileHome({ params: { userId } }: Params) {
   const usercontext = useContext<number | null>(UserContext);
   const userId2 = usercontext ?? "";
 
-  const [userInfo, setUserInfo] = useState<UserTypes | undefined>();
+  const [userInfo, setUserInfo] = useState<UserWithFollowType | undefined>();
   const [userPosts, setUserPosts] = useState<PostType[] | undefined>();
 
   useEffect(() => {
@@ -42,16 +42,15 @@ export default function ProfileHome({ params: { userId } }: Params) {
   console.log(userInfo);
   console.log(userPosts);
 
+  let postCnt = 0;
+  if (userPosts) postCnt = userPosts.length;
+
   return (
     <>
-      <Profile userInfo={userInfo} />
+      <Profile userInfo={userInfo} postCnt={postCnt} userId={userId} />
       <div className="max-h-[526px] overflow-y-auto">
         {/* {userId} */}
-        <UserPost
-          userPosts={userPosts}
-          userName={userInfo?.userName}
-          profilePhoto={userInfo?.profilePhoto}
-        />
+        <UserPost userPosts={userPosts} userInfo={userInfo} />
       </div>
     </>
   );

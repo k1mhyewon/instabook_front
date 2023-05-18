@@ -31,7 +31,7 @@ export const Header = () => {
               />
             </svg>
           </Link>
-          <Link href="/post/write">
+          <Link href={`/post/write/${userId}`}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -49,7 +49,7 @@ export const Header = () => {
           </Link>
         </div>
         <div className="flex justify-center">
-          <Link href="/">
+          <Link href={`/home/${userId}`}>
             <Image src={logoimg} alt="logo" className="w-32" />
           </Link>
         </div>
