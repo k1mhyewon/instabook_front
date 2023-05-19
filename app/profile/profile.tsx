@@ -71,12 +71,28 @@ export const Profile = (props: ProfileProps) => {
     <>
       <div className="mb-4">
         <div className="flex mt-4">
-          <div className="">
-            <Image
-              src={userimg}
-              alt="user"
-              className="w-32 h-32 ml-4 object-cover rounded-full"
-            />
+          <div className="ml-4">
+            {props.userInfo?.profilePhoto ? (
+              <>
+                <Image
+                  src={require(`../../public/images/${props.userInfo?.profilePhoto}`)}
+                  alt="user"
+                  className="w-32 h-32 object-cover rounded-full"
+                  width={100}
+                  height={100}
+                />
+              </>
+            ) : (
+              <>
+                <Image
+                  src={require("../../public/images/userProfile.png")}
+                  alt="user"
+                  className="w-32 h-32 object-cover rounded-full"
+                  width={80}
+                  height={80}
+                />
+              </>
+            )}
           </div>
           <div className="flex flex-col ml-4 justify-center pl-4 mb-5">
             <div className="font-bold text-lg">{props.userInfo?.userName}</div>

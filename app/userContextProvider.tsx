@@ -27,7 +27,6 @@ export const UserContextProvider: React.FC<UserContextProps> = ({
           })
           .then((response) => {
             userId = response.data.sub;
-            console.log(userId);
             setUserContext(userId);
           })
           .catch((error) => {
@@ -35,7 +34,7 @@ export const UserContextProvider: React.FC<UserContextProps> = ({
           });
       }
     }
-  }, []);
+  }, [userContext]);
 
   return (
     <UserContext.Provider value={userContext}>{children}</UserContext.Provider>

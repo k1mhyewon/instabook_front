@@ -6,13 +6,21 @@ export const FileInput = () => {
   const [selectedImage, setSelectedImage] = useState("");
   const [selectedFile, setSelectedFile] = useState<File>();
 
-  const onFileChange = (e: React.FormEvent<HTMLInputElement>) => {
-    setSelectedFile(e.currentTarget.files?.[0]);
+  // const onFileChange = (e: React.FormEvent<HTMLInputElement>) => {
+  //   setSelectedFile(e.currentTarget.files?.[0]);
+  // };
+
+  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      // setSelectedImage(URL.createObjectURL(file));
+      setSelectedFile(file);
+    }
   };
 
   return (
     <>
-      <div className="flex items-center justify-center w-full">
+      {/* <div className="flex items-center justify-center w-full">
         <label
           htmlFor="profilePhoto"
           className="flex flex-col items-center justify-center w-full h-36 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
@@ -42,18 +50,18 @@ export const FileInput = () => {
             </p>
           </div>
           <input
-            id="profilePhoto"
+            id="files"
             type="file"
             className="hidden"
-            name="profilePhoto"
-            onChange={({ target }) => {
-              if (target.files) {
-                const file = target.files[0];
-                setSelectedImage(URL.createObjectURL(file));
-                setSelectedFile(file);
-              }
-            }}
-            // onChange={onFileChange}
+            name="files"
+            // onChange={({ target }) => {
+            //   if (target.files) {
+            //     const file = target.files[0];
+            //     setSelectedImage(URL.createObjectURL(file));
+            //     setSelectedFile(file);
+            //   }
+            // }}
+            onChange={onFileChange}
           />
         </label>
         {selectedImage ? (
@@ -61,7 +69,22 @@ export const FileInput = () => {
         ) : (
           <div></div>
         )}
-      </div>
+      </div> */}
+
+      <label
+        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+        htmlFor="multiple_files"
+      >
+        Photo
+      </label>
+      <input
+        className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+        id="files"
+        name="files"
+        type="file"
+        onChange={onFileChange}
+        multiple
+      />
     </>
   );
 };

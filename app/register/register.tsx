@@ -5,8 +5,12 @@ import axios from "axios";
 import { Dispatch, SetStateAction, useRef, useState } from "react";
 import { Inputs } from "../components/inputs";
 import { PasswordInputs } from "./components/passwordInputs";
+import { FileInput } from "../post/write/conponents/fileInput";
+import { useRouter } from "next/navigation";
 
 export const Register = () => {
+  const router = useRouter();
+
   const passwordSame = useRef(false);
   const passwordValid = useRef(false);
 
@@ -23,30 +27,31 @@ export const Register = () => {
       console.log(key, value);
       json[key] = value;
     }
-    if (passwordSame.current && passwordValid.current) {
-      try {
-        const response = await axios.post(
-          "http://localhost:3000/api/register",
-          json,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        console.log(response.data);
-        alert("회원가입 성공");
-      } catch (error) {
-        console.error(error);
-      }
-    } else {
-      alert("안맞음");
+    // if (passwordSame.current && passwordValid.current) {
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/register",
+        json,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log(response.data);
+      alert("회원가입 성공");
+      router.push("/");
+    } catch (error) {
+      console.error(error);
     }
+    // } else {
+    //   alert("안맞음");
+    // }
   };
 
   return (
     <>
-      <section className="mt-16">
+      <section className="">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
           <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -77,8 +82,10 @@ export const Register = () => {
 
                 <PasswordInputs
                   passwordSame={passwordSame}
-                  passwordValid={passwordValid}
+                  // passwordValid={passwordValid}
                 />
+
+                <FileInput />
 
                 <button
                   type="submit"
@@ -90,7 +97,7 @@ export const Register = () => {
                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                   Already have an account?{" "}
                   <Link
-                    href="/signin"
+                    href="/auth/login"
                     className="font-medium text-primary-600 hover:underline dark:text-primary-500"
                   >
                     Login here

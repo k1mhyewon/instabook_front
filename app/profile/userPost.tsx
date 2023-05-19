@@ -19,16 +19,21 @@ type PostProps = {
 };
 
 export const UserPost = (props: PostProps) => {
-  const [showReply, setShowReply] = useState(false);
+  const [showReplyMap, setShowReplyMap] = useState<{
+    [postId: string]: boolean;
+  }>({});
 
-  const handleReplyClick = () => {
-    setShowReply(!showReply);
+  const handleReplyClick = (postId: string) => {
+    setShowReplyMap((prev) => ({
+      ...prev,
+      [postId]: !prev[postId],
+    }));
   };
 
   return (
     <>
       {props.userPosts?.map((post, i) => (
-        <div key={i}>
+        <div key={post.id}>
           <HomeUserTitle
             userName={post.user.userName}
             userId={post.user.id}
@@ -38,17 +43,34 @@ export const UserPost = (props: PostProps) => {
             <div className="flex flex-col mt-4 mb-2">
               <UserPostContent content={post.content} />
 
-              <div className="w-full mt-4 flex justify-center">
-                <div className="mr-4 w-32 h-40">
-                  <Image src={postimg} alt="user" className="object-fill" />
-                </div>
-              </div>
+              {/* <Image src={postimg} alt="user" className="object-fill" /> */}
+              {post.postPhoto ? (
+                <>
+                  <div className="w-full mt-4 flex justify-center">
+                    <div className="mr-4 w-32 h-40">
+                      <Image
+                        src={require(`../../public/images/${post.postPhoto}`)}
+                        alt="postPhoto"
+                        className=""
+                        width={200}
+                        height={200}
+                      />
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <></>
+              )}
+
               <PostTags postId={post.id} />
 
               <div className="flex flex-row text-sm mt-4 ml-4">
                 <Likes post={post} />
 
-                <div className="flex " onClick={handleReplyClick}>
+                <div
+                  className="flex "
+                  onClick={() => handleReplyClick(post.id)}
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -85,7 +107,7 @@ export const UserPost = (props: PostProps) => {
                   </Link>
                 </div>
 
-                <div className="flex ml-1 mr-4">
+                <div className="flex ml-1 mr-4 ">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -106,7 +128,7 @@ export const UserPost = (props: PostProps) => {
             <div className="text-xs text-gray-500 ml-5 mb-2">
               {post.uploadDate}
             </div>
-            {showReply && (
+            {showReplyMap[post.id] && (
               <PostReply commentArr={post.comments} postId={post.id} />
             )}
 

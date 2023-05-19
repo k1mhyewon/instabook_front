@@ -11,15 +11,15 @@ import {
 
 interface Props {
   passwordSame: MutableRefObject<boolean>;
-  passwordValid: MutableRefObject<boolean>;
+  // passwordValid: MutableRefObject<boolean>;
 }
 
 export const PasswordInputs = (props: Props) => {
   const password = useRef("");
   const passwordCheck = useRef("");
 
-  const localPasswordSame = useRef(false);
-  const localPasswordValid = useRef(false);
+  const localPasswordSame = useRef(true);
+  // const localPasswordValid = useRef(true);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,15}$/;
@@ -29,14 +29,14 @@ export const PasswordInputs = (props: Props) => {
       case "password":
         password.current = value;
 
-        if (passwordRegex.test(password.current)) {
-          props.passwordValid.current = true;
-          localPasswordValid.current = true;
-        } else {
-          props.passwordValid.current = false;
-          localPasswordValid.current = false;
-        }
-        break;
+      // if (passwordRegex.test(password.current)) {
+      //   // props.passwordValid.current = true;
+      //   localPasswordValid.current = true;
+      // } else {
+      //   // props.passwordValid.current = false;
+      //   localPasswordValid.current = false;
+      // }
+      // break;
       case "passwordCheck":
         passwordCheck.current = value;
         break;
@@ -52,7 +52,7 @@ export const PasswordInputs = (props: Props) => {
       localPasswordSame.current = false;
     }
 
-    console.log(localPasswordValid.current);
+    // console.log(localPasswordValid.current);
   };
 
   return (
@@ -75,7 +75,7 @@ export const PasswordInputs = (props: Props) => {
           minLength={8}
           maxLength={15}
         />
-        {localPasswordValid.current ? (
+        {/* {localPasswordValid.current ? (
           <></>
         ) : (
           <>
@@ -83,7 +83,7 @@ export const PasswordInputs = (props: Props) => {
               8-15자리의 대,소문자, 숫자
             </p>
           </>
-        )}
+        )} */}
       </div>
       <div>
         <label

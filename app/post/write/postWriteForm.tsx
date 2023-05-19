@@ -64,7 +64,7 @@ export const PostWriteForm = () => {
     try {
       await axios.post("http://localhost:3000/api/post/write", json, {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
         },
       });
 

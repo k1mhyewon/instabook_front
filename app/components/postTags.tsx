@@ -31,7 +31,7 @@ export const PostTags = (props: PostTagsProps) => {
 
   return (
     <>
-      <div className="mt-10">
+      <div className="mt-4 ml-4 italic hover:underline-offset-1">
         {tagNamesArr.length > 0 &&
           tagNamesArr.map((tagName, index) => (
             <Link href={`/search/${tagName}`} key={tagName}>

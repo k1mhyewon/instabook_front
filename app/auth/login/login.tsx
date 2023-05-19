@@ -7,19 +7,18 @@ import { Inputs } from "@/app/components/inputs";
 import { useContext, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { UserContext } from "@/app/userContextProvider";
+import googleLoginBtn from "../../../public/images/util/googleLoginBtn.png";
 
 export const Login = () => {
-  const userId = useContext<number | null>(UserContext);
-  // console.log("dd");
-  // console.log(userId);
-
   const router = useRouter();
 
+  const userId = useContext<number | null>(UserContext);
+
   useEffect(() => {
-    // const token = sessionStorage.getItem("access-token");
-    if (userId) {
+    const token = sessionStorage.getItem("access-token");
+    if (userId !== null && token) {
       // 로그인된 상태이므로 다음 경로로 리다이렉트 또는 필요한 작업을 수행합니다.
-      router.push("/");
+      router.push(`/home/${userId}`);
     }
   }, []);
 
@@ -53,7 +52,23 @@ export const Login = () => {
         "access-token",
         JSON.stringify(response.data.access_token)
       );
-      router.push("/");
+
+      const sessionData = sessionStorage.getItem("access-token");
+      let localUserId;
+      axios
+        .get("http://localhost:3000/api/getUserInfo", {
+          headers: {
+            Authorization: `Bearer ${sessionData}`,
+          },
+        })
+        .then((response) => {
+          localUserId = response.data.sub;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
+      router.push(`/home/${localUserId}`);
       alert("로그인 성공");
     } catch (error) {
       alert("로그인 실패");
@@ -87,7 +102,7 @@ export const Login = () => {
                   max={15}
                 />
 
-                <div className="flex items-center justify-between">
+                {/* <div className="flex items-center justify-between">
                   <div className="flex items-start"></div>
                   <a
                     href="#"
@@ -95,7 +110,7 @@ export const Login = () => {
                   >
                     Forgot password?
                   </a>
-                </div>
+                </div> */}
 
                 <button
                   type="submit"
@@ -103,11 +118,14 @@ export const Login = () => {
                 >
                   Sign in
                 </button>
+                <button>
+                  <Image src={googleLoginBtn} alt="logo" className="w-50" />
+                </button>
 
                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                   Don’t have an account yet?{" "}
                   <Link
-                    href="/signup"
+                    href="/register"
                     className="font-medium text-primary-600 hover:underline dark:text-primary-500"
                   >
                     Sign up
