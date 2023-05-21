@@ -2,7 +2,7 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { Header } from "./header";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { UserContextProvider } from "./userContextProvider";
 import { QueryClient, QueryClientProvider, useQuery } from "react-query";
@@ -23,13 +23,17 @@ export default function RootLayout({
 }) {
   const router = useRouter();
 
+  // const [token, setToken] = useState<string | null>();
+
   useEffect(() => {
     const token = sessionStorage.getItem("access-token");
     if (token) {
       // 로그인된 상태이므로 다음 경로로 리다이렉트 또는 필요한 작업을 수행합니다.
       // const request = await axios.get()
+      // setToken(accessToken);
     } else {
       router.push("/auth/login");
+      // setToken(null);
     }
   }, []);
 

@@ -42,8 +42,7 @@ export const UserPost = (props: PostProps) => {
           <div>
             <div className="flex flex-col mt-4 mb-2">
               <UserPostContent content={post.content} />
-
-              {/* <Image src={postimg} alt="user" className="object-fill" /> */}
+              {/* {post.id} */}
               {post.postPhoto ? (
                 <>
                   <div className="w-full mt-4 flex justify-center">

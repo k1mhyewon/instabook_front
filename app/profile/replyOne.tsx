@@ -11,48 +11,39 @@ import { CommentWithUserInfoType } from "../types/commentType";
 
 type ReplyOneProps = {
   commentInfo: CommentWithUserInfoType;
-  // key: number;
 };
 
 export const ReplyOne = (props: ReplyOneProps) => {
-  // const [replyInputs, setReplyInputs] = useState(
-  //   // 초기값으로 각 댓글의 showInput 상태를 false로 설정
-  //   new Array(2).fill(false)
-  // );
-
-  // const handleReplyInputClick = (index: number) => {
-  //   // index에 해당하는 댓글의 showInput 상태를 toggle
-  //   setReplyInputs((inputs) => {
-  //     const newInputs = inputs.map(() => false);
-  //     newInputs[index] = true;
-  //     return newInputs;
-  //   });
-  // };
-
-  // const [isFilled, setIsFilled] = useState(new Array(2).fill(false));
-
-  // const handleClick = (index: number) => {
-  //   setIsFilled((likesInputs) => {
-  //     const newLikesInputs = likesInputs.map(() => false);
-  //     newLikesInputs[index] = true;
-  //     return newLikesInputs;
-  //   });
-  // };
-
   return (
     <>
       <div className="ml-2 mt-3 flex items-center">
         <div className="mr-2">
-          <Image
-            src={userimg}
-            alt="user"
-            className="w-8 h-8 object-cover rounded-full"
-          />
+          {props.commentInfo.user.profilePhoto ? (
+            <>
+              <Image
+                src={require(`../../public/images/${props.commentInfo.user.profilePhoto}`)}
+                alt="user"
+                className="w-8 h-8 object-cover rounded-full"
+                width={30}
+                height={30}
+              />
+            </>
+          ) : (
+            <>
+              <Image
+                src={require("../../public/images/userProfile.png")}
+                alt="user"
+                className="w-8 h-8 object-cover rounded-full"
+                width={30}
+                height={30}
+              />
+            </>
+          )}
         </div>
         <div className="mb-2">
           <div className="flex items-row">
             <Link href={`/profile/${props.commentInfo?.user.id}`}>
-              <div className="text-xs font-bold">
+              <div className="text-xs font-bold mr-2">
                 {props.commentInfo?.user.userName}
               </div>
             </Link>
@@ -61,11 +52,8 @@ export const ReplyOne = (props: ReplyOneProps) => {
             </div>
           </div>
           <div className="flex items-row">
-            <div className="flex-1 ">{props.commentInfo?.content}</div>
-            <div
-              className="flex justify-end mr-4 ml-2 items-center"
-              // onClick={() => handleClick(1)}
-            >
+            <div className="flex-1 text-sm">{props.commentInfo?.content}</div>
+            <div className="flex justify-end mr-4 ml-2 items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 // fill={isFilled ? "red" : "none"}
@@ -92,28 +80,9 @@ export const ReplyOne = (props: ReplyOneProps) => {
                 <p className="text-xs text-slate-600 ml-1">like</p>
               </div>
             </Link>
-            {/* <div
-              className="text-xs text-slate-600"
-              // onClick={() => handleReplyInputClick(1)}
-            >
-              reply
-            </div> */}
           </div>
         </div>
       </div>
-      {/* {replyInputs[1] && (
-        <div className="flex justify-center mt-3">
-          <div className="text-gray-400 ml-4 text-xl pt-1">{"|"}</div>
-          <input
-            type="text"
-            placeholder=""
-            className="py-1 border border-gray-300 rounded-lg mb-4 ml-4 w-9/12 "
-          />
-        </div>
-      )} */}
     </>
   );
 };
-// function setIsFilled(arg0: (prevState: any) => boolean) {
-//   throw new Error("Function not implemented.");
-// }

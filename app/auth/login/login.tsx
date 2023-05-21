@@ -53,22 +53,23 @@ export const Login = () => {
         JSON.stringify(response.data.access_token)
       );
 
-      const sessionData = sessionStorage.getItem("access-token");
-      let localUserId;
-      axios
-        .get("http://localhost:3000/api/getUserInfo", {
-          headers: {
-            Authorization: `Bearer ${sessionData}`,
-          },
-        })
-        .then((response) => {
-          localUserId = response.data.sub;
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      router.push(`/home/${response.data.payload.sub}`);
+      // setUserContext(userId);
 
-      router.push(`/home/${localUserId}`);
+      // const sessionData = sessionStorage.getItem("access-token");
+      // let localUserId;
+      // axios
+      //   .get("http://localhost:3000/api/getUserInfo", {
+      //     headers: {
+      //       Authorization: `Bearer ${sessionData}`,
+      //     },
+      //   })
+      //   .then((response) => {
+      //     localUserId = response.data.sub;
+      //   })
+      //   .catch((error) => {
+      //     console.error(error);
+      //   });
       alert("로그인 성공");
     } catch (error) {
       alert("로그인 실패");

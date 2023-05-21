@@ -4,7 +4,7 @@
 // module.exports = nextConfig
 
 module.exports = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   async rewrites() {
     console.log(process.env.NODE_ENV);
     if (process.env.NODE_ENV !== "production") {

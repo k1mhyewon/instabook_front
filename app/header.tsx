@@ -11,6 +11,14 @@ export const Header = () => {
   const router = useRouter();
 
   const [token, setToken] = useState<string | null>(null);
+  const usercontext = useContext<number | null>(UserContext);
+
+  const userId = usercontext ?? "";
+
+  const goLogout = () => {
+    sessionStorage.removeItem("access-token");
+    router.push(`auth/login`);
+  };
 
   useEffect(() => {
     // 클라이언트 측에서 실행되는 경우에만 sessionStorage 접근
@@ -18,16 +26,7 @@ export const Header = () => {
       const storedToken = sessionStorage.getItem("access-token");
       setToken(storedToken);
     }
-  }, []);
-
-  const usercontext = useContext<number | null>(UserContext);
-  const userId = usercontext ?? "";
-
-  const goLogout = () => {
-    sessionStorage.removeItem("access-token");
-
-    router.push(`auth/login`);
-  };
+  }, [usercontext]);
 
   return (
     <>
