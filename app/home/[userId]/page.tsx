@@ -21,22 +21,20 @@ export default function UserHome({ params: { userId } }: Params) {
       const token = JSON.parse(sessionData);
       if (typeof window !== "undefined" && token) {
         console.log(token);
-        if (token) {
-          axios
-            .get("http://localhost:3000/api/getUserInfo", {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            })
-            .then((response) => {
-              // userId = response.data.sub;
-              const { sub } = response.data;
-              setUserPosts(sub);
-            })
-            .catch((error) => {
-              console.error(error);
-            });
-        }
+        axios
+          .get("http://localhost:3000/api/getUserInfo", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((response) => {
+            // userId = response.data.sub;
+            const { sub } = response.data;
+            setUserPosts(sub);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       }
     }
   }, []);

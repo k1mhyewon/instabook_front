@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
 import axios from "axios";
+import { SessionProvider } from "next-auth/react";
 
 interface UserContextProps {
   children: React.ReactNode;
@@ -39,30 +40,29 @@ export const UserContextProvider: React.FC<UserContextProps> = ({
 
   useEffect(() => {
     fetchUserData();
-
-    // let userId: number | null = null;
-    // const sessionData = sessionStorage.getItem("access-token") ?? null;
-    // if (typeof window !== "undefined" && sessionData) {
-    //   const token = JSON.parse(sessionData);
-    //   console.log(token);
-    //   if (token) {
-    //     axios
-    //       .get(`${process.env.REACT_APP_SERVER_URL}/getUserInfo`, {
-    //         headers: {
-    //           Authorization: `Bearer ${token}`,
-    //         },
-    //       })
-    //       .then((response) => {
-    //         userId = response.data.sub;
-    //         setUserContext(userId);
-    //       })
-    //       .catch((error) => {
-    //         console.error(error);
-    //       });
-    //   }
-    // }
-    // }, [userContext]);
   }, []);
+  // let userId: number | null = null;
+  // const sessionData = sessionStorage.getItem("access-token") ?? null;
+  // if (typeof window !== "undefined" && sessionData) {
+  //   const token = JSON.parse(sessionData);
+  //   console.log(token);
+  //   if (token) {
+  //     axios
+  //       .get(`${process.env.REACT_APP_SERVER_URL}/getUserInfo`, {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       })
+  //       .then((response) => {
+  //         userId = response.data.sub;
+  //         setUserContext(userId);
+  //       })
+  //       .catch((error) => {
+  //         console.error(error);
+  //       });
+  //   }
+  // }
+  // }, [userContext]);
 
   return (
     <UserContext.Provider value={userContext}>{children}</UserContext.Provider>

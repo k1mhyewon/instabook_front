@@ -35,7 +35,7 @@ export const PostTags = (props: PostTagsProps) => {
         {tagNamesArr.length > 0 &&
           tagNamesArr.map((tagName, index) => (
             <Link href={`/search/${tagName}`} key={tagName}>
-              <span>#{tagName} </span>
+              <span className="text-sm">#{tagName} </span>
             </Link>
           ))}
       </div>

@@ -17,7 +17,7 @@ export const HomeUserTitle = (props: UserTitleProps) => {
   return (
     <>
       <Link href={`profile/${props.userId}`}>
-        <div className="ml-2 mt-3 flex items-center">
+        <div className="ml-3 mt-4 flex items-center">
           <div className="mr-2">
             {props.profilePhoto ? (
               <>

@@ -10,9 +10,40 @@ type LikesProps = {
 };
 
 export const Likes = (props: LikesProps) => {
-  const userId = useContext<number | null>(UserContext);
+  // const userId = useContext<number | null>(UserContext);
+  const [userId, setUserId] = useState<number>(0);
+
+  const fetchUserData = async () => {
+    try {
+      const sessionData = sessionStorage.getItem("access-token") ?? null;
+
+      if (typeof window !== "undefined" && sessionData) {
+        const token = JSON.parse(sessionData);
+        console.log(token);
+        if (token) {
+          const response = await axios.get(
+            "http://localhost:3000/api/getUserInfo",
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          const userId = response.data.sub;
+          setUserId(userId);
+        }
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
 
   const [likeBool, setLikeBool] = useState(false);
+  const [likeCnt, setLikeCnt] = useState(props.post.likes.length);
 
   const getPostLikeBool = async () => {
     try {
@@ -33,6 +64,7 @@ export const Likes = (props: LikesProps) => {
         {}
       );
       setLikeBool(!likeBool);
+      setLikeCnt(response.data.length);
     } catch (error) {
       console.error(error);
     }
@@ -61,7 +93,7 @@ export const Likes = (props: LikesProps) => {
           />
         </svg>
         <Link href="/like">
-          <p>{props.post.likes.length}</p>
+          <p>{likeCnt}</p>
         </Link>
       </div>
     </>

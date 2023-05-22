@@ -46,13 +46,13 @@ export const UserPost = (props: PostProps) => {
               {post.postPhoto ? (
                 <>
                   <div className="w-full mt-4 flex justify-center">
-                    <div className="mr-4 w-32 h-40">
+                    <div className="mr-4 w-50 h-50 overflow-hidden">
                       <Image
                         src={require(`../../public/images/${post.postPhoto}`)}
                         alt="postPhoto"
-                        className=""
-                        width={200}
-                        height={200}
+                        className="w-full h-full object-cover"
+                        width={180}
+                        height={180}
                       />
                     </div>
                   </div>

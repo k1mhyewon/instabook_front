@@ -85,7 +85,7 @@ export const SearchInput = (props: SearchInputProps) => {
           </button>
         </form>
         <div className="mt-8 mb-4 max-h-[725px] overflow-y-auto">
-          {/* <UserPost userPosts={userPosts} /> */}
+          <UserPost userPosts={userPosts} />
         </div>
       </div>
     </>

@@ -2,9 +2,9 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { Header } from "./header";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { UserContextProvider } from "./userContextProvider";
+import { UserContext, UserContextProvider } from "./userContextProvider";
 import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -16,6 +16,12 @@ export const metadata = {
 
 const queryClient = new QueryClient();
 
+declare global {
+  interface Window {
+    Kakao: any;
+  }
+}
+
 export default function RootLayout({
   children,
 }: {
@@ -24,8 +30,11 @@ export default function RootLayout({
   const router = useRouter();
 
   // const [token, setToken] = useState<string | null>();
+  const userId = useContext<number | null>(UserContext);
 
   useEffect(() => {
+    window.Kakao.init(process.env.KAKAO_KEY);
+
     const token = sessionStorage.getItem("access-token");
     if (token) {
       // 로그인된 상태이므로 다음 경로로 리다이렉트 또는 필요한 작업을 수행합니다.
@@ -39,6 +48,9 @@ export default function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+        <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+      </head>
       <body className={inter.className}>
         <main
           className="flex min-h-screen flex-col justify-between"

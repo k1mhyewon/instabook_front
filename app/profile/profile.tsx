@@ -3,7 +3,7 @@ import Image from "next/image";
 import userimg from "../../public/images/user.jpg";
 import Link from "next/link";
 import { UserTypes, UserWithFollowType } from "../types/userTypes";
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { UserContext } from "../userContextProvider";
 import { useRouter } from "next/router";
 import axios from "axios";
@@ -18,6 +18,8 @@ export const Profile = (props: ProfileProps) => {
   const usercontext = useContext<number | null>(UserContext);
   const userId: number | undefined = usercontext ?? undefined;
   const str_loginUserId = userId?.toString();
+
+  // const [followers, setFollowers] = useState(0);
 
   const str_selectedUserId = props.userId;
 
@@ -36,7 +38,6 @@ export const Profile = (props: ProfileProps) => {
       imFollowingThis.current = false;
     }
   });
-
   const goFollow = async () => {
     try {
       const response = await axios.get(
@@ -44,8 +45,8 @@ export const Profile = (props: ProfileProps) => {
         {}
       );
       console.log(response.data);
-
       alert("팔로우 성공");
+      window.location.reload();
     } catch (error) {
       alert("팔로우 실패");
       console.error(error);
@@ -59,13 +60,16 @@ export const Profile = (props: ProfileProps) => {
         {}
       );
       console.log(response.data);
-
       alert("언팔 성공");
+      window.location.reload();
     } catch (error) {
       alert("언팔 실패");
       console.error(error);
     }
   };
+
+  // useEffect(() => {
+  // }, []);
 
   return (
     <>

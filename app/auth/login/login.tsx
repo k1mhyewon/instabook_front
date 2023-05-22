@@ -8,6 +8,8 @@ import { useContext, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { UserContext } from "@/app/userContextProvider";
 import googleLoginBtn from "../../../public/images/util/googleLoginBtn.png";
+import { GoogleBtn } from "@/app/components/googleLoginBtn";
+import { KakaoLogin } from "@/app/components/kakaoLogin";
 
 export const Login = () => {
   const router = useRouter();
@@ -119,9 +121,8 @@ export const Login = () => {
                 >
                   Sign in
                 </button>
-                <button>
-                  <Image src={googleLoginBtn} alt="logo" className="w-50" />
-                </button>
+                {/* <GoogleBtn /> */}
+                <KakaoLogin />
 
                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                   Don’t have an account yet?{" "}
