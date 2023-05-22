@@ -18,7 +18,7 @@ export const ReplyOne = (props: ReplyOneProps) => {
   const userId = useContext<number | null>(UserContext);
 
   const [likeBool, setLikeBool] = useState(false);
-  const [likeCnt, setLikeCnt] = useState(props.commentInfo?.likes.length);
+  const [likeCnt, setLikeCnt] = useState(0);
 
   const getCommentLikeBool = async () => {
     try {
@@ -65,6 +65,7 @@ export const ReplyOne = (props: ReplyOneProps) => {
 
   useEffect(() => {
     getCommentLikeBool();
+    setLikeCnt(props.commentInfo?.likes.length);
   }, []);
 
   return (
